@@ -101,7 +101,7 @@ Whisky Mobile APP Frontend/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/nrbnayon/Whisky-Cask-Club-APP.git
+   git clone https://github.com/nrbnayon/whisky_cask_club_mobile_app.git
    cd "Whisky Mobile APP Frontend"
    ```
 
