@@ -2,6 +2,8 @@
 
 A comprehensive React Native mobile application for whisky cask investment management, featuring real-time notifications, referral rewards, portfolio tracking, and seamless cask purchasing experience.
 
+Android Apk: https://expo.dev/artifacts/eas/kg9ko6JodZrFDGkxhatWDe.apk
+
 ## 📱 Features
 
 ### Core Functionality
