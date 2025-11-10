@@ -1,633 +1,321 @@
-# Whisky Cask Club - Backend API
+# Whisky Cask Club Mobile App
 
-A comprehensive Node.js/Express.js backend API for the Whisky Cask Club mobile application, featuring role-based authentication, MongoDB with aggregation framework, file uploads, and Stripe payment integration.
+A comprehensive React Native mobile application for whisky cask investment management, featuring real-time notifications, referral rewards, portfolio tracking, and seamless cask purchasing experience.
 
-## 🚀 Features
+## 📱 Features
 
-- **Role-Based Authentication** (User, Manager, Admin)
-- **Complete CRUD Operations** for all resources
-- **MongoDB with Aggregation Framework** for complex queries
-- **File Upload System** with Multer
-- **Stripe Payment Integration** for payments and payouts
-- **Email Service** with Nodemailer
-- **Comprehensive API Documentation**
-- **Error Handling & Validation**
-- **Security Best Practices**
-- **Modular Architecture**
+### Core Functionality
+- **User Authentication**: Secure sign-up, sign-in, password reset with OTP verification
+- **Cask Management**: Browse, search, and filter available whisky casks
+- **Portfolio Tracking**: Monitor your cask investments and lifetime profit gains
+- **Order Management**: Place orders, express interest, and track purchase history
+- **Referral System**: Earn points through user referrals with reward tracking
+- **Real-time Notifications**: Firebase Cloud Messaging integration for instant updates
+- **Exclusive Offers**: Access special deals and promotional offers
+- **Profile Management**: Edit profile, change password, and manage account settings
+- **Dark Mode Support**: Automatic theme switching based on system preferences
 
-## 📋 Prerequisites
+### User Experience
+- **Intuitive Navigation**: Tab-based navigation with bottom bar
+- **Responsive Design**: Optimized for various screen sizes
+- **Pull-to-Refresh**: Real-time data synchronization
+- **Empty States**: User-friendly messages for empty data scenarios
+- **Error Handling**: Comprehensive error management with user feedback
+- **Activity Feed**: Track all your interactions and transactions
 
-- Node.js (v18.0.0 or higher)
-- MongoDB Atlas account
-- Stripe account (for payments)
-- Email service (Gmail recommended)
+## 🏗️ Project Structure
 
-## 🛠️ Installation
+```
+Whisky Mobile APP Frontend/
+├── app/                          # App screens and navigation
+│   ├── (auth)/                  # Authentication screens
+│   │   ├── sign-in.tsx
+│   │   ├── sign-up.tsx
+│   │   ├── forgot-password.tsx
+│   │   ├── reset-password.tsx
+│   │   └── verify-otp.tsx
+│   ├── (main)/                  # Main app screens
+│   │   ├── index.tsx            # Home/Dashboard
+│   │   ├── portfolio.tsx        # Cask portfolio
+│   │   ├── offers.tsx           # Special offers
+│   │   ├── my-purchase.tsx      # Purchase history
+│   │   ├── profile.tsx          # User profile
+│   │   ├── referral.tsx         # Referral system
+│   │   ├── cask/[id].tsx        # Cask details
+│   │   ├── offer-details/[id].tsx
+│   │   ├── purchase-details/[id].tsx
+│   │   └── express-interest/[id].tsx
+│   └── (screen)/                # Additional screens
+│       ├── notifications.tsx
+│       ├── privacy-policy.tsx
+│       └── terms-conditions.tsx
+├── components/                   # Reusable components
+│   ├── ui/                      # Base UI components
+│   │   ├── Button.tsx
+│   │   ├── Input.tsx
+│   │   ├── Card.tsx
+│   │   ├── LoadingSpinner.tsx
+│   │   └── ThemeContext.tsx
+│   └── shared/                  # Feature-specific components
+│       ├── CaskCard.tsx
+│       ├── OfferCard.tsx
+│       ├── StatsCard.tsx
+│       ├── ActivityItem.tsx
+│       └── NotificationCard.tsx
+├── services/                     # API services
+│   ├── authService.ts
+│   ├── caskService.ts
+│   ├── offerService.ts
+│   ├── purchaseService.ts
+│   ├── referralService.ts
+│   ├── notificationService.ts
+│   └── firebaseNotificationService.ts
+├── store/                        # State management
+│   └── useAppStore.ts           # Zustand store
+├── hooks/                        # Custom React hooks
+│   ├── useAuth.ts
+│   ├── useApi.ts
+│   └── useFirebaseNotifications.ts
+├── utils/                        # Utility functions
+│   ├── apiClient.ts
+│   ├── formatters.ts
+│   ├── validationSchemas.ts
+│   ├── errorHandler.ts
+│   └── toast.ts
+└── config/                       # Configuration files
+    └── firebase.ts              # Firebase setup
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+- React Native development environment
+- Expo CLI
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
+
+### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd whisky-cask-club-backend
+   git clone https://github.com/nrbnayon/Whisky-Cask-Club-APP.git
+   cd "Whisky Mobile APP Frontend"
    ```
 
 2. **Install dependencies**
    ```bash
+   yarn install
+   # or
    npm install
    ```
 
-3. **Environment Setup**
+3. **Configure environment variables**
    ```bash
    cp .env.example .env
    ```
    
-   Update the `.env` file with your configuration:
+   Update `.env` with your configuration:
    ```env
-   MONGODB_URL=mongodb+srv://nrbnayon:chatters@cluster0.f6x2ow6.mongodb.net/WhiskyCaskClubAPP?retryWrites=true&w=majority
-   JWT_SECRET=your_super_secret_jwt_key_here
-   STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_app_password
+   API_BASE_URL=your_api_url
+   FIREBASE_API_KEY=your_firebase_key
+   FIREBASE_AUTH_DOMAIN=your_auth_domain
+   FIREBASE_PROJECT_ID=your_project_id
+   FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   FIREBASE_APP_ID=your_app_id
    ```
 
-4. **Create upload directories**
-   ```bash
-   mkdir -p uploads/{users,casks,offers,documents,temp}
-   ```
+4. **Configure Firebase**
+   - Place `google-services.json` in the root directory (Android)
+   - Place `GoogleService-Info.plist` in the root directory (iOS)
+   - Follow the guides in `FIREBASE_NOTIFICATIONS_SETUP.md`
 
-5. **Start the server**
-   ```bash
-   # Development
-   npm run dev
-   
-   # Production
-   npm start
-   ```
+### Running the App
 
-## 📚 API Documentation
+#### Development Mode
 
-### Base URL
-```
-http://localhost:5000/api
-```
+```bash
+# Start the Expo development server
+yarn start
 
-### Authentication
-All protected routes require a Bearer token in the Authorization header:
-```
-Authorization: Bearer <your_jwt_token>
+# Run on Android
+yarn android
+
+# Run on iOS
+yarn ios
+
+# Run on web
+yarn web
 ```
 
-## 🔐 Authentication Endpoints
+#### Production Build
 
-### Register User
-```http
-POST /api/auth/register
-Content-Type: application/json
+```bash
+# Build for Android
+eas build --platform android
 
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john@example.com",
-  "password": "Password123!",
-  "confirmPassword": "Password123!",
-  "referralCode": "OPTIONAL123"
-}
+# Build for iOS
+eas build --platform ios
+
+# Build for both platforms
+eas build --platform all
 ```
 
-### Login User
-```http
-POST /api/auth/login
-Content-Type: application/json
+## 🔧 Technology Stack
 
-{
-  "email": "john@example.com",
-  "password": "Password123!"
-}
+### Core Technologies
+- **React Native** - Cross-platform mobile framework
+- **Expo** - Development and build platform
+- **TypeScript** - Type-safe JavaScript
+- **Expo Router** - File-based routing system
+
+### UI & Styling
+- **NativeWind** - Tailwind CSS for React Native
+- **Lucide React Native** - Icon library
+- **React Native Reanimated** - Animations
+
+### State Management
+- **Zustand** - Lightweight state management
+- **React Context** - Theme management
+
+### Backend Integration
+- **Axios** - HTTP client
+- **Firebase Cloud Messaging** - Push notifications
+- **AsyncStorage** - Local data persistence
+
+### Development Tools
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **TypeScript** - Static type checking
+
+## 📂 Key Configuration Files
+
+- `app.json` - Expo configuration
+- `eas.json` - EAS Build configuration
+- `babel.config.js` - Babel configuration
+- `tailwind.config.js` - Tailwind CSS configuration
+- `metro.config.js` - Metro bundler configuration
+- `tsconfig.json` - TypeScript configuration
+
+## 🔔 Firebase Notifications
+
+The app includes comprehensive Firebase Cloud Messaging integration:
+
+- **Real-time notifications** for order updates
+- **Background notification handling**
+- **Notification permission management**
+- **Custom notification sounds and icons**
+
+Refer to the following documentation:
+- `FIREBASE_NOTIFICATIONS_SETUP.md` - Setup guide
+- `FIREBASE_NOTIFICATIONS_API.md` - API documentation
+- `POSTMAN_FIREBASE_NOTIFICATIONS.md` - Testing guide
+
+## 🎨 Theming
+
+The app supports both light and dark modes with automatic system preference detection:
+
+```typescript
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+const colorScheme = useColorScheme();
+// Returns 'light' or 'dark' based on system preference
 ```
 
-### Get Profile
-```http
-GET /api/auth/profile
-Authorization: Bearer <token>
-```
+## 📱 Key Features Implementation
 
-### Update Profile
-```http
-PUT /api/auth/profile
-Authorization: Bearer <token>
-Content-Type: application/json
+### Authentication Flow
+- Email/password authentication
+- OTP verification for password reset
+- Persistent login with secure token storage
+- Automatic token refresh
 
-{
-  "firstName": "John",
-  "lastName": "Smith",
-  "phone": "+1234567890"
-}
-```
+### Cask Management
+- Browse available casks with filtering
+- Detailed cask information and specifications
+- Express interest in premium casks
+- Track cask performance and valuation
 
-## 👥 User Management
+### Referral System
+- Unique referral codes for each user
+- Point-based reward system
+- Track referral history and earnings
+- Share referral links via social media
 
-### Get All Users (Admin)
-```http
-GET /api/users?page=1&limit=20&search=john&role=user
-Authorization: Bearer <admin_token>
-```
-
-### Get User Dashboard
-```http
-GET /api/users/dashboard
-Authorization: Bearer <token>
-```
-
-### Update User Role (Admin)
-```http
-PUT /api/users/:id/role
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "role": "manager"
-}
-```
-
-## 🥃 Cask Management
-
-### Get User Casks
-```http
-GET /api/casks/my-casks?page=1&limit=20&status=Ready
-Authorization: Bearer <token>
-```
-
-### Get All Casks (Admin)
-```http
-GET /api/casks?page=1&limit=20&search=macallan&status=Ready
-Authorization: Bearer <admin_token>
-```
-
-### Create Cask (Admin)
-```http
-POST /api/casks
-Authorization: Bearer <admin_token>
-Content-Type: multipart/form-data
-
-{
-  "name": "Macallan 25yr",
-  "distillery": "The Macallan",
-  "year": 1998,
-  "volume": "500L",
-  "abv": "63.2%",
-  "location": "Scotland",
-  "purchasePrice": 14000,
-  "currentValue": 15500,
-  "owner": "user_id_here",
-  "caskImages": [file1, file2]
-}
-```
-
-### Update Cask
-```http
-PUT /api/casks/:id
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "currentValue": 16000,
-  "status": "Ready"
-}
-```
-
-## 🎯 Offer Management
-
-### Get All Offers (Public)
-```http
-GET /api/offers?page=1&limit=20&type=cask&search=macallan
-```
-
-### Get Featured Offers
-```http
-GET /api/offers/featured?limit=5
-```
-
-### Create Offer (Admin)
-```http
-POST /api/offers
-Authorization: Bearer <admin_token>
-Content-Type: multipart/form-data
-
-{
-  "title": "Rare Macallan 30yr Cask",
-  "description": "Premium investment opportunity",
-  "type": "cask",
-  "originalPrice": "18,000",
-  "currentPrice": "15,500",
-  "priceNumeric": 15500,
-  "location": "Scotland",
-  "rating": 4.9,
-  "expiryDate": "2025-02-15",
-  "image": [main_image_file],
-  "images": [additional_image_files]
-}
-```
-
-### Express Interest
-```http
-POST /api/offers/:id/express-interest
-Authorization: Bearer <token>
-```
-
-## 🛒 Purchase Management
-
-### Create Purchase (Express Interest)
-```http
-POST /api/purchases
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "offer": "offer_id_here",
-  "investmentAmountNumeric": 15000,
-  "personalInfo": {
-    "fullName": "John Doe",
-    "email": "john@example.com",
-    "phoneNumber": "+1234567890",
-    "preferredContactMethod": "email"
-  }
-}
-```
-
-### Get User Purchases
-```http
-GET /api/purchases/my-purchases?page=1&limit=20&status=Pending
-Authorization: Bearer <token>
-```
-
-### Update Purchase Status (Admin)
-```http
-PUT /api/purchases/:id/status
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "status": "Active",
-  "reason": "Investment approved"
-}
-```
-
-## 🔔 Notification Management
-
-### Get User Notifications
-```http
-GET /api/notifications?page=1&limit=20&type=portfolio&isRead=false
-Authorization: Bearer <token>
-```
-
-### Mark as Read
-```http
-PATCH /api/notifications/:id/read
-Authorization: Bearer <token>
-```
-
-### Create Notification (Admin)
-```http
-POST /api/notifications
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "title": "New Feature Available",
-  "message": "Check out our new portfolio analytics",
-  "type": "system",
-  "recipient": "user_id_here",
-  "priority": "medium"
-}
-```
-
-## 📊 Activity Tracking
-
-### Get User Activities
-```http
-GET /api/activities?page=1&limit=20&type=gain
-Authorization: Bearer <token>
-```
-
-### Get Activity Analytics (Admin)
-```http
-GET /api/activities/admin/analytics?period=30d
-Authorization: Bearer <admin_token>
-```
-
-## 🤝 Referral System
-
-### Get User Referral Data
-```http
-GET /api/referrals/my-referrals
-Authorization: Bearer <token>
-```
-
-### Validate Referral Code
-```http
-GET /api/referrals/validate/JAMES2024
-```
-
-### Update Referral Status (Admin)
-```http
-PUT /api/referrals/:id/status
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "status": "completed",
-  "rewardAmount": 50
-}
-```
-
-## 💳 Payment System
-
-### Get Payment Methods
-```http
-GET /api/payments/methods
-Authorization: Bearer <token>
-```
-
-### Add Payment Method
-```http
-POST /api/payments/methods
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "cardNumber": "4242424242424242",
-  "expiryMonth": 12,
-  "expiryYear": 2025,
-  "cvc": "123",
-  "cardholderName": "John Doe"
-}
-```
-
-### Request Payout
-```http
-POST /api/payments/payout
-Authorization: Bearer <token>
-Content-Type: application/json
-
-{
-  "amount": 100,
-  "paymentMethodId": "payment_method_id_here"
-}
-```
-
-## 🔧 Admin Dashboard
-
-### Get Dashboard Statistics
-```http
-GET /api/admin/dashboard?period=30d
-Authorization: Bearer <admin_token>
-```
-
-### Get System Health
-```http
-GET /api/admin/system-health
-Authorization: Bearer <admin_token>
-```
-
-### Bulk Operations
-```http
-POST /api/admin/bulk-operations
-Authorization: Bearer <admin_token>
-Content-Type: application/json
-
-{
-  "operation": "update",
-  "model": "User",
-  "ids": ["id1", "id2"],
-  "data": { "isActive": true }
-}
-```
-
-### Export Data
-```http
-GET /api/admin/export?model=users&format=json
-Authorization: Bearer <admin_token>
-```
-
-## 📁 File Upload
-
-### Single File Upload
-```http
-POST /api/upload/single
-Authorization: Bearer <token>
-Content-Type: multipart/form-data
-
-file: [your_file]
-```
-
-### Multiple Files Upload
-```http
-POST /api/upload/multiple
-Authorization: Bearer <token>
-Content-Type: multipart/form-data
-
-files: [file1, file2, file3]
-```
-
-## 🗂️ Project Structure
-
-```
-src/
-├── controllers/          # Route controllers
-│   ├── authController.js
-│   ├── userController.js
-│   ├── caskController.js
-│   ├── offerController.js
-│   ├── purchaseController.js
-│   ├── notificationController.js
-│   ├── activityController.js
-│   ├── referralController.js
-│   ├── paymentController.js
-│   └── adminController.js
-├── middleware/           # Custom middleware
-│   ├── auth.js
-│   ├── validation.js
-│   ├── upload.js
-│   ├── errorHandler.js
-│   └── notFound.js
-├── models/              # Mongoose models
-│   ├── User.js
-│   ├── Cask.js
-│   ├── Offer.js
-│   ├── Purchase.js
-│   ├── Notification.js
-│   ├── Activity.js
-│   ├── Referral.js
-│   └── Payment.js
-├── routes/              # Express routes
-│   ├── authRoutes.js
-│   ├── userRoutes.js
-│   ├── caskRoutes.js
-│   ├── offerRoutes.js
-│   ├── purchaseRoutes.js
-│   ├── notificationRoutes.js
-│   ├── activityRoutes.js
-│   ├── referralRoutes.js
-│   ├── paymentRoutes.js
-│   ├── adminRoutes.js
-│   └── uploadRoutes.js
-├── utils/               # Utility functions
-│   ├── emailService.js
-│   ├── stripeService.js
-│   ├── helpers.js
-│   └── seedData.js
-└── server.js           # Main server file
-```
-
-## 🔒 Security Features
-
-- **JWT Authentication** with secure token generation
-- **Password Hashing** with bcryptjs
-- **Rate Limiting** to prevent abuse
-- **Input Validation** with express-validator
-- **File Upload Security** with type and size restrictions
-- **CORS Configuration** for cross-origin requests
-- **Helmet** for security headers
-- **Role-Based Access Control** (RBAC)
+### Order Tracking
+- Real-time order status updates
+- Purchase history with detailed invoices
+- Lifetime profit calculations
+- Portfolio performance metrics
 
 ## 🧪 Testing
 
-### Default Admin Account
-```
-Email: admin@whiskycaskclub.com
-Password: Admin123!
-Role: admin
-```
-
-### Test User Account
-```
-Email: james@example.com
-Password: Password123!
-Role: user
-```
-
-## 📈 Database Aggregation Examples
-
-The backend uses MongoDB's aggregation framework for complex queries:
-
-### User Statistics
-```javascript
-const userStats = await User.aggregate([
-  {
-    $group: {
-      _id: null,
-      totalUsers: { $sum: 1 },
-      activeUsers: { $sum: { $cond: ['$isActive', 1, 0] } },
-      totalBalance: { $sum: '$balance' },
-    }
-  }
-]);
-```
-
-### Portfolio Analytics
-```javascript
-const portfolioStats = await Cask.aggregate([
-  { $match: { owner: userId } },
-  {
-    $group: {
-      _id: null,
-      totalCasks: { $sum: 1 },
-      totalValue: { $sum: '$currentValue' },
-      totalGain: { $sum: { $subtract: ['$currentValue', '$purchasePrice'] } },
-    }
-  }
-]);
-```
-
-## 🚀 Deployment
-
-### Environment Variables for Production
-```env
-NODE_ENV=production
-PORT=5000
-MONGODB_URL=your_production_mongodb_url
-JWT_SECRET=your_very_secure_jwt_secret
-STRIPE_SECRET_KEY=sk_live_your_live_stripe_key
-```
-
-### PM2 Configuration
 ```bash
-npm install -g pm2
-pm2 start src/server.js --name "whisky-cask-api"
-pm2 startup
-pm2 save
+# Run tests
+yarn test
+
+# Run tests with coverage
+yarn test:coverage
+
+# Run linter
+yarn lint
+
+# Fix linting issues
+yarn lint:fix
 ```
 
-## 📝 API Response Format
+## 📦 Building for Production
 
-### Success Response
-```json
-{
-  "success": true,
-  "message": "Operation completed successfully",
-  "data": {
-    // Response data
-  }
-}
-```
+### Android
+1. Update version in `app.json`
+2. Run `eas build --platform android`
+3. Submit to Google Play Store: `eas submit --platform android`
 
-### Error Response
-```json
-{
-  "success": false,
-  "message": "Error description",
-  "errors": [
-    {
-      "field": "email",
-      "message": "Email is required"
-    }
-  ]
-}
-```
+### iOS
+1. Update version in `app.json`
+2. Run `eas build --platform ios`
+3. Submit to App Store: `eas submit --platform ios`
 
-### Pagination Response
-```json
-{
-  "success": true,
-  "data": {
-    "items": [...],
-    "pagination": {
-      "current": 1,
-      "pages": 5,
-      "total": 100,
-      "limit": 20
-    }
-  }
-}
-```
+## 🔐 Security
 
-## 🔧 Maintenance
-
-### Database Seeding
-```bash
-# Seed initial data (run once)
-node -e "require('./src/utils/seedData').seedDatabase()"
-```
-
-### Cleanup Operations
-```bash
-# Clean up old files
-node -e "require('./src/middleware/upload').cleanupOldFiles('./uploads/temp')"
-```
-
-## 📞 Support
-
-For technical support or questions about the API, please contact:
-- Email: support@whiskycaskclub.com
-- Documentation: [API Docs URL]
+- Secure token storage using AsyncStorage
+- API request encryption
+- Input validation and sanitization
+- Protected routes for authenticated users
+- Secure password reset flow
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is proprietary and confidential.
+
+## 👥 Support
+
+For support, please contact the development team or refer to the internal documentation.
+
+## 🔄 Version History
+
+- **v1.0.0** - Initial release
+  - Core authentication features
+  - Cask browsing and management
+  - Portfolio tracking
+  - Referral system
+  - Push notifications
+
+## 📞 Contact
+
+For any inquiries or support, please reach out to the project maintainers.
+
+---
+
+**Built with ❤️ for Whisky Cask Club**
